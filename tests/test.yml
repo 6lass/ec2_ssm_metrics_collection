@@ -1,0 +1,69 @@
+---
+- name: Test EC2 SSM Metrics Collection
+  hosts: localhost
+  gather_facts: false
+  vars:
+     # Test variables (simulated data)
+     test_linux_instance: "i-1234567890abcdef0"
+     test_windows_instance: "i-abcdef1234567890"
+     test_region: "us-east-1"
+
+  tasks:
+     # --- Test Linux ---
+     - name: Test Linux metrics (mock example)
+       ec2_ssm_metrics:
+          region: "{{ test_region }}"
+          instance_id: "{{ test_linux_instance }}"
+          os_type: "linux"
+       register: linux_results
+       when: false # Disabled by default (set to 'true' for real tests)
+
+     - name: Debug Linux results
+       debug:
+          var: linux_results
+       when: linux_results is defined
+
+     # --- Test Windows ---
+     - name: Test Windows metrics (mock example)
+       ec2_ssm_metrics:
+          region: "{{ test_region }}"
+          instance_id: "{{ test_windows_instance }}"
+          os_type: "windows"
+       register: windows_results
+       when: false # Disabled by default (set to 'true' for real tests)
+
+     - name: Debug Windows results
+       debug:
+          var: windows_results
+       when: windows_results is defined
+
+     # --- Validation Tests ---
+     - name: Validate module fails with invalid instance ID
+       ec2_ssm_metrics:
+          region: "{{ test_region }}"
+          instance_id: "invalid-id"
+          os_type: "linux"
+       register: invalid_test
+       ignore_errors: yes
+       failed_when: false
+
+     - name: Assert error for invalid instance ID
+       assert:
+          that:
+             - "'Invalid instance_id format' in invalid_test.msg"
+          fail_msg: "Module did not fail as expected for invalid instance_id"
+
+     - name: Validate module fails with invalid OS type
+       ec2_ssm_metrics:
+          region: "{{ test_region }}"
+          instance_id: "{{ test_linux_instance }}"
+          os_type: "macos" # Invalid OS
+       register: invalid_os_test
+       ignore_errors: yes
+       failed_when: false
+
+     - name: Assert error for invalid OS type
+       assert:
+          that:
+             - "'os_type must be' in invalid_os_test.msg"
+          fail_msg: "Module did not fail as expected for invalid os_type"

@@ -1,0 +1,12 @@
+- name: Test EC2 SSM Metrics
+  hosts: localhost
+  tasks:
+     - name: Get Linux metrics
+       ec2_ssm_metrics:
+          region: "us-east-1"
+          instance_id: "i-123"
+          os_type: "linux"
+       register: linux_metrics
+
+     - debug:
+          var: linux_metrics

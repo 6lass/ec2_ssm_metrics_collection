@@ -1,0 +1,10 @@
+namespace: 6lass
+name: ec2_ssm_metrics
+version: 1.0.0
+readme: docs/README.md
+authors:
+   - Your Name <your@email.com>
+description: "Collection to fetch EC2 instance metrics via AWS SSM"
+license: Apache-2.0
+tags: ["aws", "ec2", "ssm", "monitoring"]
+repository: https://github.com/6lass/ec2_ssm_metrics_collection
