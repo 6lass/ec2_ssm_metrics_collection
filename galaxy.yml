@@ -1,4 +1,4 @@
-namespace: 6lass
+namespace: glass
 name: ec2_ssm_metrics
 version: 1.0.0
 readme: docs/README.md
